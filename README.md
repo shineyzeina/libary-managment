@@ -5,6 +5,7 @@
 1. `npm install`
 2. Create a PostgreSQL database and set `DATABASE_URL` in `.env`.
 3. `npm run db:push` then `npm run dev`.
+4. Optional: set `OPENAI_API_KEY` in `.env` for the AI “Suggest a book” feature.
 
 ## Deploy on Render
 
@@ -34,6 +35,7 @@
 
 4. **Environment**
    - Add `DATABASE_URL`: open your PostgreSQL service → **Info** → **Internal Database URL** (or **External** if you prefer), copy it, then in the Web Service → **Environment** → add `DATABASE_URL` = that URL.
+   - Optional: add `OPENAI_API_KEY` for the AI suggestion feature.
 
 5. **Deploy**
    - Save. Render will build and deploy. The release step runs before each deploy and creates/updates tables from your schema.
