@@ -1,5 +1,5 @@
-import "dotenv/config";
-import { db, schema } from "../src/lib/db";
+import { NextResponse } from "next/server";
+import { db, schema } from "@/lib/db";
 import { and, eq } from "drizzle-orm";
 
 const BOOKS = [
@@ -20,36 +20,31 @@ const BOOKS = [
   { title: "Beloved", author: "Toni Morrison", year: 1987, genre: "Fiction" },
 ];
 
-async function seed() {
-  if (!process.env.DATABASE_URL) {
-    console.log("DATABASE_URL not set, skipping seed.");
-    process.exit(0);
-  }
-  let added = 0;
-  let skipped = 0;
-  for (const b of BOOKS) {
-    const existing = await db
-      .select()
-      .from(schema.books)
-      .where(and(eq(schema.books.title, b.title), eq(schema.books.author, b.author)));
-    if (existing.length > 0) {
-      skipped++;
-      continue;
+export async function GET() {
+  try {
+    let added = 0;
+    let skipped = 0;
+    for (const b of BOOKS) {
+      const existing = await db
+        .select()
+        .from(schema.books)
+        .where(and(eq(schema.books.title, b.title), eq(schema.books.author, b.author)));
+      if (existing.length > 0) {
+        skipped++;
+        continue;
+      }
+      await db.insert(schema.books).values({
+        id: crypto.randomUUID(),
+        title: b.title,
+        author: b.author,
+        genre: b.genre,
+        year: b.year,
+      });
+      added++;
     }
-    await db.insert(schema.books).values({
-      id: crypto.randomUUID(),
-      title: b.title,
-      author: b.author,
-      genre: b.genre,
-      year: b.year,
-    });
-    added++;
-    console.log("Added:", b.title);
+    return NextResponse.json({ ok: true, added, skipped });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Seed failed" }, { status: 500 });
   }
-  console.log(`Done. Added ${added}, skipped ${skipped} (already exist).`);
 }
-
-seed().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
