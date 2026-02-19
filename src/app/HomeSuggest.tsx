@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function HomeSuggest({ className = "" }: { className?: string }) {
+export function HomeSuggest() {
   const [prompt, setPrompt] = useState("");
   const [suggestion, setSuggestion] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -26,29 +26,38 @@ export function HomeSuggest({ className = "" }: { className?: string }) {
   };
 
   return (
-    <div className={`rounded-xl border border-slate-200 bg-white p-6 shadow-sm ${className}`}>
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">AI suggestion</h2>
-      <p className="mt-1 text-slate-600">Get a book recommendation from the catalog.</p>
-      <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
+    <div className="rounded-2xl border border-amber-200/60 bg-white/90 p-8 shadow-sm backdrop-blur">
+      <h2 className="text-xs font-semibold uppercase tracking-wider text-amber-800/80">
+        AI suggestion
+      </h2>
+      <p className="mt-2 text-slate-600">
+        Get a book recommendation from the catalog.
+      </p>
+      <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
         <input
           type="text"
           placeholder="e.g. Something light for the weekend"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="flex-1 rounded border border-slate-300 px-3 py-2 text-slate-800 placeholder-slate-500 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+          className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
         />
         <button
           type="submit"
           disabled={loading}
-          className="rounded bg-slate-800 px-4 py-2 font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+          className="shrink-0 rounded-xl bg-slate-900 px-5 py-2.5 font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
         >
           {loading ? "…" : "Suggest"}
         </button>
       </form>
       {suggestion && (
-        <blockquote className="mt-4 border-l-4 border-slate-300 pl-4 italic text-slate-700">
+        <blockquote className="mt-5 border-l-4 border-amber-300 bg-amber-50/50 py-2 pl-4 pr-2 text-slate-700">
           {suggestion}
         </blockquote>
+      )}
+      {suggestion && suggestion.includes("not configured") && (
+        <p className="mt-2 text-xs text-slate-500">
+          Set OPENAI_API_KEY in your environment to enable AI suggestions.
+        </p>
       )}
     </div>
   );
