@@ -5,7 +5,8 @@
 1. `npm install`
 2. Create a PostgreSQL database and set `DATABASE_URL` in `.env`.
 3. `npm run db:push` then `npm run dev`.
-4. Optional: set `OPENAI_API_KEY` in `.env` for the AI “Suggest a book” feature.
+4. Optional: set `OPENAI_API_KEY` in `.env` for the AI suggestion feature.
+5. Seed books: `npm run seed` (needs `DATABASE_URL`). Skips existing title+author.
 
 ## Deploy on Render
 
