@@ -3,8 +3,8 @@ services:
     name: library-management
     runtime: node
     plan: free
-    buildCommand: npm install && npm run db:push && npm run build
-    startCommand: npm start
+    buildCommand: npm install && npm run build
+    startCommand: npm run db:push && npm start
     envVars:
       - key: DATABASE_URL
         fromDatabase:
